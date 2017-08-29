@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import sys
 
-START_DATE = "07/29/2017"
+START_DATE = "05/01/2017"
 END_DATE = "08/29/2017"
 
 
