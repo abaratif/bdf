@@ -24,6 +24,16 @@ python scrape.py data.csv
 
 ### Running Analysis
 
+The ```stats.py``` script runs the analysis. You must run the scrape.py script first so that the data.csv file will exist on disk. If you choose another filename for the CSV, update this in the stats.py code.
+
+The script takes a start date, an end date, and the name of the commodity as command line arguments. It will print the name of the commodity, as well as the average across the range. The range is inclusive. The output is rounded to two decimal places.
+
+```
+python stats.py 2017-05-01 2017-05-03 gold
+
+> gold 1253.67 13.72
+```
+
 ## Writeup
 
 ### Scraping
@@ -41,3 +51,5 @@ I initially thought of using different libraries to try and parse out the partic
 At this point, the code was getting sort of spaghetti-like, so I took a moment to re-organize everything into a single object, and to abstract out constants into easy to change variables.
 
 ### Analysis
+
+The analysis mainly consisted of loading the CSV, filtering the data frame, and then getting the mean and variance. I chose to round the decimals up, to two places as per the spec. I had to pass an argument to the pandas var() function to specify the degrees of freedom to be used in the variance calculation, so as to not calculate a sample variance.
