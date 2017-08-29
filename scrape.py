@@ -1,14 +1,21 @@
 import requests
+import pandas as pd
 
 
 GOLD_ID = "8830"
 SILVER_ID = "8836"
 
-START_DATE = "05/18/2017"
-END_DATE = "05/24/2017"
+START_DATE = "07/29/2017"
+END_DATE = "08/29/2017"
 BASE_URL = "https://www.investing.com/instruments/HistoricalDataAjax"
 
 def scrape(start_date, end_date, commodity_id):
+	"""
+	Given a a date range and a commodity id,
+	scrape historical data from the investing.com site
+
+	Returns a string with the result gotten from the site
+	"""
 	HEADERS = {
     "X-Requested-With" : "XMLHttpRequest",
     "User-Agent" : "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
@@ -36,5 +43,22 @@ def scrape(start_date, end_date, commodity_id):
 
 	return None
 
+def parse(response_text):
+	"""
+	Given a string containing HTML response text
+	parses out the necessary data
+	
+	returns a pandas DataFrame object  
+	"""
+	df = pd.read_html(response_text)
+	df = df[0]  # Ignore footer table
+	df["Date"] = pd.to_datetime(df["Date"])
+	df["Commodity"] = "Gold"
+
+	return df   
+
 response_text = scrape(START_DATE, END_DATE, commodity_id=GOLD_ID)
-print(response_text)
+df = parse(response_text)
+df.to_csv()
+
+print(df)
